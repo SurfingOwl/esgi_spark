@@ -38,7 +38,8 @@ df.withColumn("date", to_date("date", "EEE MMM dd HH:mm:ss yyyy Z")) \
     .dropna(subset="date") \
     .filter(df.repo == "apache/spark") \
     .where(col("date") >= five_years_ago) \
+    .groupby("author") \
+    .count() \
+    .sort("count", ascending=False) \
     .show()
-    # .groupby("author") \
-    # .count() \
-    # .sort("count", ascending=False) \
+
