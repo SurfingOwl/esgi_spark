@@ -53,7 +53,7 @@ df.withColumn("words", explode(split(df.message, " "))) \
     .select(lower("words").alias("words")) \
     .groupBy("words") \
     .count() \
-    .filter((trim(col("word")) != "") & ~col("words").isin(stopwords)) \
+    .filter((trim(col("words")) != "") & (~col("words").isin(stopwords))) \
     .orderBy(desc('count')) \
     .limit(10) \
     .show()
