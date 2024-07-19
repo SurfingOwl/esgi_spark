@@ -4,3 +4,7 @@
 /*.ipynb
 .idea
 /app/data
+/app/.ipython
+/app/.jupyter
+/app/.local
+/app/.npm
