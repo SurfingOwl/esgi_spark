@@ -25,18 +25,20 @@ path = "/app/data/full.csv"
 df = spark.read.csv(path, header=True, schema=schema)
 
 # Exercice 1
-# df.dropna(subset="repo").groupby("repo").count().sort("count", ascending=False).limit(10).show()
+df_no_repo_null = df.dropna(subset="repo")
+df_no_repo_null.groupby("repo").count().sort("count", ascending=False).limit(10).show()
 
 # Exercice 2
-# df.filter(df.repo == "apache/spark").groupby("author").count().sort("count", ascending=False).show()
+df_apache_spark = df_no_repo_null.filter(df.repo == "apache/spark").withColumn("date", to_date("date", "EEE MMM dd HH:mm:ss yyyy Z"))
+
+print(df_apache_spark.groupby("author").count().sort("count", ascending=False).first())
 
 # Exercice 3
 today = datetime.datetime.now()
 five_years_ago = today.replace(year=today.year - 5)
 
-df.withColumn("date", to_date("date", "EEE MMM dd HH:mm:ss yyyy Z")) \
+df_apache_spark \
     .dropna(subset="date") \
-    .filter(df.repo == "apache/spark") \
     .where(col("date") >= five_years_ago) \
     .groupby("author") \
     .count() \
