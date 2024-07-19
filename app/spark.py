@@ -1,7 +1,7 @@
 import datetime
 
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import to_date, col
+from pyspark.sql.functions import to_date, col, lower, split, explode, trim, desc
 from pyspark.sql.types import StructType, StructField, StringType
 
 schema = StructType([StructField("commit", StringType(), False),
@@ -21,6 +21,7 @@ spark = SparkSession \
 spark.sparkContext.setLogLevel("WARN")
 
 path = "/app/data/full.csv"
+stPath = "/app/data/stopwords.txt"
 
 df = spark.read.csv(path, header=True, schema=schema)
 st = open(stPath, "r")
