@@ -23,6 +23,8 @@ spark.sparkContext.setLogLevel("WARN")
 path = "/app/data/full.csv"
 
 df = spark.read.csv(path, header=True, schema=schema)
+st = open(stPath, "r")
+stopwords = [w.strip() for w in st.readlines()]
 
 # Exercice 1
 df_no_repo_null = df.dropna(subset="repo")
@@ -43,5 +45,15 @@ df_apache_spark \
     .groupby("author") \
     .count() \
     .sort("count", ascending=False) \
+    .show()
+
+# Exercice 4
+df.withColumn("words", explode(split(df.message, " "))) \
+    .select(lower("words").alias("words")) \
+    .groupBy("words") \
+    .count() \
+    .filter((trim(col("word")) != "") & ~col("words").isin(stopwords)) \
+    .orderBy(desc('count')) \
+    .limit(10) \
     .show()
 
