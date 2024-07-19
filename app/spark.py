@@ -23,4 +23,8 @@ path = "/app/data/full.csv"
 
 df = spark.read.csv(path, header=True, schema=schema)
 
-df.dropna(subset="repo").groupby("repo").count().sort("count", ascending=False).limit(10).show()
+# Exercice 1
+#df.dropna(subset="repo").groupby("repo").count().sort("count", ascending=False).limit(10).show()
+
+# Exercice 2
+df.filter(df.repo == "apache/spark").groupby("author").count().sort("count", ascending=False).show()
